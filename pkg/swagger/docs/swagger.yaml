@@ -1,0 +1,75 @@
+basePath: /api/quasar-fire/v1
+definitions:
+  topsecret.Position:
+    properties:
+      x:
+        type: number
+      "y":
+        type: number
+    type: object
+  topsecret.RequestTopSecret:
+    properties:
+      satellites:
+        items:
+          $ref: '#/definitions/topsecret.Satellite'
+        type: array
+    type: object
+  topsecret.Satellite:
+    properties:
+      distance:
+        type: number
+      message:
+        items:
+          type: string
+        type: array
+      name:
+        type: string
+    type: object
+  topsecret.Ship:
+    properties:
+      message:
+        type: string
+      position:
+        $ref: '#/definitions/topsecret.Position'
+    type: object
+info:
+  contact:
+    email: andersonrodriguezce@gmail.com
+    name: Anderson Rodriguez
+    url: https://www.linkedin.com/in/anderson-rodriguez-cer%C3%B3n-22aa28155/
+  description: API for QUASAR-FIRE.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: QUASAR-FIRE API Rest
+  version: "1.0"
+paths:
+  /topsecret:
+    post:
+      consumes:
+      - application/json
+      description: To find the location of the ship and the message
+      parameters:
+      - description: satellites
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/topsecret.RequestTopSecret'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/topsecret.Ship'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      security:
+      - ApiKeyAuth: []
+      summary: To find the location of the ship and the message
+      tags:
+      - TopSecret
+swagger: "2.0"
