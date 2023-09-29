@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"github.com/sirupsen/logrus"
+	"os"
 	"quasar.fire.com/pkg/healthcheck"
 	"quasar.fire.com/pkg/router"
 	"quasar.fire.com/pkg/swagger"
@@ -37,5 +39,6 @@ func main() {
 
 	// Run server
 	r := router.NewRouter(routes)
-	logrus.Fatal(r.Run(":8080"))
+	port := os.Getenv("PORT")
+	logrus.Fatal(r.Run(fmt.Sprintf(":%v", port)))
 }
