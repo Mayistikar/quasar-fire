@@ -26,11 +26,6 @@ const docTemplate = `{
     "paths": {
         "/topsecret": {
             "post": {
-                "security": [
-                    {
-                        "ApiKeyAuth": []
-                    }
-                ],
                 "description": "To find the location of the ship and the message",
                 "consumes": [
                     "application/json"
@@ -69,6 +64,62 @@ const docTemplate = `{
                 }
             }
         },
+        "/topsecret_split": {
+            "get": {
+                "description": "To find the location of the ship and the message",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TopSecretSplit"
+                ],
+                "summary": "To find the location of the ship and the message",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/topsecret.Ship"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "To delete all information saved in the application database about the satellites",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Additional Utils"
+                ],
+                "summary": "To delete all information saved in the application database about the satellites",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/topsecret_split/info": {
             "get": {
                 "description": "To get all information saved in the application database about the satellites",
@@ -79,7 +130,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "TopSecretSplit"
+                    "Additional Utils"
                 ],
                 "summary": "To get all information saved in the application database about the satellites",
                 "responses": {
@@ -90,6 +141,58 @@ const docTemplate = `{
                             "items": {
                                 "$ref": "#/definitions/topsecret.Satellite"
                             }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/topsecret_split/{satellite_name}": {
+            "post": {
+                "description": "To save information about the satellites",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TopSecretSplit"
+                ],
+                "summary": "To save information about the satellites",
+                "parameters": [
+                    {
+                        "enum": [
+                            "kenobi",
+                            "skywalker",
+                            "sato"
+                        ],
+                        "type": "string",
+                        "description": "satellite_name",
+                        "name": "satellite_name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "satellite",
+                        "name": "info",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/topsecret.RequestTopSecretSplit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "string"
                         }
                     },
                     "404": {
@@ -121,6 +224,20 @@ const docTemplate = `{
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/topsecret.Satellite"
+                    }
+                }
+            }
+        },
+        "topsecret.RequestTopSecretSplit": {
+            "type": "object",
+            "properties": {
+                "distance": {
+                    "type": "number"
+                },
+                "message": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
                     }
                 }
             }

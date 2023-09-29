@@ -8,9 +8,11 @@ import (
 
 // Repository interface to represent a repository for satellite and make a dependency injection
 type Repository interface {
-	Save(*Satellite) error
+	Save(satellite *Satellite) error
+	Find() ([]Satellite, error)
 	Get(name string) (*Satellite, error)
-	GetInfo() ([]Records, error)
+	GetInfo() ([]Satellite, error)
+	Delete() error
 }
 
 // Satellite struct to represent a satellite in the space
@@ -18,6 +20,15 @@ type Satellite struct {
 	Name     string   `json:"name"`
 	Distance float32  `json:"distance"`
 	Message  []string `json:"message"`
+}
+
+// ToRecord converts a Satellite struct to a Records database register struct
+func (s *Satellite) ToRecord() *Records {
+	return &Records{
+		Name:     s.Name,
+		Distance: s.Distance,
+		Message:  strings.Join(s.Message, "|"),
+	}
 }
 
 // Ship struct to represent a ship in the space
@@ -30,14 +41,6 @@ type Ship struct {
 type Position struct {
 	X float32 `json:"x"`
 	Y float32 `json:"y"`
-}
-
-// Records struct to represent a satellites records in the database
-type Records struct {
-	ID       uint    `json:"id"`
-	Name     string  `json:"name"`
-	Distance float32 `json:"distance"`
-	Message  string  `json:"message"`
 }
 
 // GetLocation calculates the location of a ship returning

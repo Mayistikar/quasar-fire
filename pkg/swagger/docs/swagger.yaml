@@ -14,6 +14,15 @@ definitions:
           $ref: '#/definitions/topsecret.Satellite'
         type: array
     type: object
+  topsecret.RequestTopSecretSplit:
+    properties:
+      distance:
+        type: number
+      message:
+        items:
+          type: string
+        type: array
+    type: object
   topsecret.Satellite:
     properties:
       distance:
@@ -67,11 +76,83 @@ paths:
           description: Not Found
           schema:
             type: string
-      security:
-      - ApiKeyAuth: []
       summary: To find the location of the ship and the message
       tags:
       - TopSecret
+  /topsecret_split:
+    delete:
+      consumes:
+      - application/json
+      description: To delete all information saved in the application database about
+        the satellites
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: To delete all information saved in the application database about the
+        satellites
+      tags:
+      - Additional Utils
+    get:
+      consumes:
+      - application/json
+      description: To find the location of the ship and the message
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/topsecret.Ship'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: To find the location of the ship and the message
+      tags:
+      - TopSecretSplit
+  /topsecret_split/{satellite_name}:
+    post:
+      consumes:
+      - application/json
+      description: To save information about the satellites
+      parameters:
+      - description: satellite_name
+        enum:
+        - kenobi
+        - skywalker
+        - sato
+        in: path
+        name: satellite_name
+        required: true
+        type: string
+      - description: satellite
+        in: body
+        name: info
+        required: true
+        schema:
+          $ref: '#/definitions/topsecret.RequestTopSecretSplit'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: To save information about the satellites
+      tags:
+      - TopSecretSplit
   /topsecret_split/info:
     get:
       consumes:
@@ -94,5 +175,5 @@ paths:
       summary: To get all information saved in the application database about the
         satellites
       tags:
-      - TopSecretSplit
+      - Additional Utils
 swagger: "2.0"
