@@ -22,11 +22,14 @@ go run cmd/main.go
 ### Architecture
 Clean Architecture is used to separate the business logic from the framework and the database. The project is divided in 3 layers:
 - Domain: contains the business logic about the position calculation and the message
+  - domain file: contains the domain structs and Repository interface
 - Infrastructure: contains the framework and the database, it is built with the following files:
+  - handler file: contains the handler functions
   - routes file: contains the routes and the handlers
   - dto file: contains the data transfer objects
   - repository file: contains the database queries
 - Service: contains the use case to get the location and message from the satellites
+  - service file: contains the use case functions
 
 
 ## API Heroku
