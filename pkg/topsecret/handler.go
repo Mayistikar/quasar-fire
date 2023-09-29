@@ -45,3 +45,21 @@ func (h *Handler) TopSecret(ctx *gin.Context) {
 
 	ctx.JSON(http.StatusOK, response)
 }
+
+// TopSecretSplitInfo for handle topsecret_split/info request
+// @Tags TopSecretSplit
+// @Summary To get all information saved in the application database about the satellites
+// @Description To get all information saved in the application database about the satellites
+// @Accept json
+// @Produce json
+// @Success 200 {object} []Satellite
+// @Failure 404 {object} string
+// @Router /topsecret_split/info [get]
+func (h *Handler) TopSecretSplitInfo(ctx *gin.Context) {
+	info, err := h.service.TopSecretSplitInfo()
+	if err != nil {
+		ctx.JSON(http.StatusNotFound, "no se pudo encontrar información relacionada a los satelites")
+		return
+	}
+	ctx.JSON(http.StatusOK, info)
+}

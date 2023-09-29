@@ -60,6 +60,38 @@
                     }
                 }
             }
+        },
+        "/topsecret_split/info": {
+            "get": {
+                "description": "To get all information saved in the application database about the satellites",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "TopSecretSplit"
+                ],
+                "summary": "To get all information saved in the application database about the satellites",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/topsecret.Satellite"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

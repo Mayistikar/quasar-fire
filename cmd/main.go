@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"github.com/sirupsen/logrus"
+	"gorm.io/driver/sqlite" // Sqlite driver based on CGO
+	"gorm.io/gorm"
 	"os"
 	"quasar.fire.com/pkg/healthcheck"
 	"quasar.fire.com/pkg/router"
@@ -11,19 +13,25 @@ import (
 )
 
 func main() {
-	//	fmt.Println(GetLocation(100, 115.5, 142.7))
-	//	fmt.Println(GetMessage(
-	//		[]string{"", "este", "es", "un", "mensaje"},
-	//		[]string{"este", "", "un", "mensaje"},
-	//		[]string{"", "", "es", "", "mensaje"},
-	//	))
+
+	// Database instance
+	db, err := gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+	if err != nil {
+		logrus.Fatalf("Error opening database: %v", err)
+	}
+
+	// Migrations
+	if err := db.AutoMigrate(&topsecret.Records{}); err != nil {
+		logrus.Fatalf("Error migrating database: %v", err)
+	}
 
 	// Healthcheck
 	healthcheckHandler := healthcheck.NewHandler()
 	healthcheckRoutes := healthcheck.NewRoutes(healthcheckHandler)
 
 	// TopSecret
-	topsecretService := topsecret.NewService()
+	topsecretRepository := topsecret.NewRepository(db)
+	topsecretService := topsecret.NewService(topsecretRepository)
 	topsecretHandler := topsecret.NewHandler(topsecretService)
 	topsecretRoutes := topsecret.NewRoutes(topsecretHandler)
 
@@ -37,8 +45,10 @@ func main() {
 		Swagger:     swaggerRoutes,
 	}
 
+	// Get port from environment
+	port := os.Getenv("PORT")
+
 	// Run server
 	r := router.NewRouter(routes)
-	port := os.Getenv("PORT")
 	logrus.Fatal(r.Run(fmt.Sprintf(":%v", port)))
 }

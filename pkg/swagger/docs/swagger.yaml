@@ -72,4 +72,27 @@ paths:
       summary: To find the location of the ship and the message
       tags:
       - TopSecret
+  /topsecret_split/info:
+    get:
+      consumes:
+      - application/json
+      description: To get all information saved in the application database about
+        the satellites
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/topsecret.Satellite'
+            type: array
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: To get all information saved in the application database about the
+        satellites
+      tags:
+      - TopSecretSplit
 swagger: "2.0"
