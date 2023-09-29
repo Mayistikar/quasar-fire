@@ -17,6 +17,8 @@ go run main.go
 - Gin: web framework
 - Swagger: documentation
 - SQLite: database
+- Gorm: ORM
+- Logrus: logger
 ### Architecture
 Clean Architecture is used to separate the business logic from the framework and the database. The project is divided in 3 layers:
 - Domain: contains the business logic about the position calculation and the message
