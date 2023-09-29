@@ -4,7 +4,7 @@
 run the following command to start the server
 ```bash
 export PORT="8080"
-go run main.go
+go run cmd/main.go
 ```
 
 ## Project Structure
